@@ -1,23 +1,22 @@
 // Pose = [cabeza x,y, hombro, cadera, codo, mano, rodilla, pie] (vista lateral, lienzo 100x100)
-        const S = [50, 18, 50, 30, 50, 56, 50, 44, 50, 58, 50, 73, 50, 90];
-        const mk = (a, o) => { const r = a.slice(); for (const k in o) r[k] = o[k]; return r };
-        const E = [
+const STANDING_POSE = [50, 18, 50, 30, 50, 56, 50, 44, 50, 58, 50, 73, 50, 90];
+const EXERCISES = [
             { n: 'Sentadilla', g: 'Piernas', q: 'cmg', w: 1, a: [50, 18, 50, 30, 50, 56, 56, 38, 60, 32, 50, 73, 50, 90], b: [56, 32, 54, 44, 40, 68, 60, 50, 64, 44, 58, 70, 50, 90] },
             { n: 'Zancada', g: 'Piernas', q: 'cmg', w: 1, a: [50, 18, 50, 30, 50, 56, 56, 44, 52, 52, 50, 73, 50, 90], b: [50, 24, 50, 36, 50, 62, 56, 46, 52, 54, 68, 68, 68, 90] },
-            { n: 'Peso muerto rumano', g: 'Piernas', q: 'mg', w: 1, a: S, b: [74, 42, 66, 46, 40, 52, 66, 58, 64, 70, 44, 72, 44, 90] },
+            { n: 'Peso muerto rumano', g: 'Piernas', q: 'mg', w: 1, a: STANDING_POSE, b: [74, 42, 66, 46, 40, 52, 66, 58, 64, 70, 44, 72, 44, 90] },
             { n: 'Extensión de cuádriceps', g: 'Piernas', q: 'g', w: 0, env: '<path d="M30 30V62H48"/>', a: [38, 24, 38, 36, 40, 60, 44, 50, 54, 58, 60, 62, 60, 86], b: [38, 24, 38, 36, 40, 60, 44, 50, 54, 58, 60, 62, 86, 62] },
             { n: 'Curl femoral tumbado', g: 'Piernas', q: 'g', w: 0, env: '<path d="M12 78H66"/>', a: [20, 66, 30, 68, 56, 70, 40, 74, 30, 76, 72, 70, 90, 70], b: [20, 66, 30, 68, 56, 70, 40, 74, 30, 76, 72, 70, 72, 48] },
             { n: 'Elevación de pelvis', g: 'Glúteo', q: 'cmg', w: 1, env: '<path d="M10 72H34"/>', a: [16, 62, 26, 66, 44, 78, 38, 74, 48, 78, 64, 66, 68, 90], b: [16, 62, 26, 66, 50, 62, 38, 66, 50, 66, 66, 60, 68, 90] },
-            { n: 'Elevación de talones', g: 'Gemelos', q: 'cmg', w: 0, a: S, b: [50, 12, 50, 24, 50, 50, 50, 38, 50, 52, 50, 67, 54, 88] },
+            { n: 'Elevación de talones', g: 'Gemelos', q: 'cmg', w: 0, a: STANDING_POSE, b: [50, 12, 50, 24, 50, 50, 50, 38, 50, 52, 50, 67, 54, 88] },
             { n: 'Press de banca', g: 'Pecho', q: 'mg', w: 1, env: '<path d="M12 69H64"/>', a: [20, 62, 32, 62, 58, 62, 32, 48, 32, 36, 76, 60, 80, 88], b: [20, 62, 32, 62, 58, 62, 40, 56, 33, 52, 76, 60, 80, 88] },
             { n: 'Flexiones', g: 'Pecho', q: 'c', w: 0, a: [22, 52, 28, 58, 58, 70, 28, 72, 28, 86, 72, 76, 88, 86], b: [20, 72, 28, 76, 58, 80, 40, 80, 28, 86, 72, 83, 88, 86] },
             { n: 'Dominadas', g: 'Espalda', q: 'cg', w: 0, env: '<path d="M30 10H70"/>', a: [54, 22, 50, 32, 50, 58, 52, 20, 50, 10, 54, 72, 48, 86], b: [56, 10, 50, 24, 50, 50, 58, 18, 50, 10, 56, 64, 50, 78] },
             { n: 'Remo con mancuerna', g: 'Espalda', q: 'mg', w: 1, a: [70, 40, 62, 44, 36, 54, 64, 62, 64, 76, 42, 72, 40, 90], b: [70, 40, 62, 44, 36, 54, 52, 52, 60, 56, 42, 72, 40, 90] },
             { n: 'Peso muerto', g: 'Espalda', q: 'mg', w: 1, a: [74, 42, 66, 46, 42, 54, 66, 60, 64, 74, 52, 72, 48, 90], b: [50, 18, 50, 30, 48, 56, 50, 46, 50, 60, 50, 73, 48, 90] },
-            { n: 'Press militar', g: 'Hombro', q: 'mg', w: 1, a: mk(S, { 6: 56, 7: 40, 8: 54, 9: 28 }), b: [46, 20, 50, 30, 50, 56, 54, 20, 54, 8, 50, 73, 50, 90] },
-            { n: 'Elevación frontal', g: 'Hombro', q: 'mg', w: 1, a: mk(S, { 6: 52, 8: 54 }), b: mk(S, { 6: 62, 7: 31, 8: 76, 9: 31 }) },
-            { n: 'Curl de bíceps', g: 'Bíceps', q: 'mg', w: 1, a: mk(S, { 6: 52, 8: 54 }), b: mk(S, { 6: 54, 8: 62, 9: 30 }) },
-            { n: 'Extensión de tríceps', g: 'Tríceps', q: 'mg', w: 1, a: mk(S, { 6: 54, 8: 64, 9: 36 }), b: mk(S, { 6: 54, 8: 56, 9: 60 }) },
+            { n: 'Press militar', g: 'Hombro', q: 'mg', w: 1, a: [50, 18, 50, 30, 50, 56, 56, 40, 54, 28, 50, 73, 50, 90], b: [46, 20, 50, 30, 50, 56, 54, 20, 54, 8, 50, 73, 50, 90] },
+            { n: 'Elevación frontal', g: 'Hombro', q: 'mg', w: 1, a: [50, 18, 50, 30, 50, 56, 52, 44, 54, 58, 50, 73, 50, 90], b: [50, 18, 50, 30, 50, 56, 62, 31, 76, 31, 50, 73, 50, 90] },
+            { n: 'Curl de bíceps', g: 'Bíceps', q: 'mg', w: 1, a: [50, 18, 50, 30, 50, 56, 52, 44, 54, 58, 50, 73, 50, 90], b: [50, 18, 50, 30, 50, 56, 54, 44, 62, 30, 50, 73, 50, 90] },
+            { n: 'Extensión de tríceps', g: 'Tríceps', q: 'mg', w: 1, a: [50, 18, 50, 30, 50, 56, 54, 44, 64, 36, 50, 73, 50, 90], b: [50, 18, 50, 30, 50, 56, 54, 44, 56, 60, 50, 73, 50, 90] },
             { n: 'Crunch abdominal', g: 'Abdomen', q: 'cmg', w: 0, a: [20, 76, 28, 78, 52, 82, 24, 70, 20, 74, 66, 66, 76, 84], b: [34, 62, 38, 68, 52, 82, 34, 58, 32, 62, 66, 66, 76, 84] },
             { n: 'Plancha', g: 'Abdomen', q: 'cmg', w: 0, t: 1, a: [22, 60, 28, 66, 58, 72, 28, 82, 40, 82, 72, 76, 88, 86], b: [22, 58, 28, 64, 58, 66, 28, 82, 40, 82, 72, 72, 88, 86] },
             { n: 'Prensa de piernas', g: 'Piernas', q: 'g', w: 0, env: '<path d="M10 62L34 84M60 58L84 40"/>', a: [16, 52, 24, 60, 38, 74, 32, 70, 38, 66, 56, 58, 68, 46], b: [16, 52, 24, 60, 38, 74, 32, 70, 38, 66, 72, 50, 88, 36] },
@@ -26,7 +25,7 @@
             { n: 'Puente de glúteo', g: 'Glúteo', q: 'c', w: 0, a: [14, 80, 24, 82, 46, 84, 34, 84, 44, 86, 62, 66, 66, 88], b: [14, 80, 24, 82, 48, 62, 34, 84, 44, 86, 64, 60, 66, 88] },
             { n: 'Patada de glúteo', g: 'Glúteo', q: 'cmg', w: 0, a: [18, 46, 28, 52, 60, 54, 28, 68, 28, 86, 64, 74, 60, 86], b: [18, 46, 28, 52, 60, 54, 28, 68, 28, 86, 78, 56, 94, 52] },
             { n: 'Gemelos sentado', g: 'Gemelos', q: 'mg', w: 1, env: '<path d="M28 40V66H48"/>', a: [38, 28, 38, 40, 40, 64, 46, 54, 60, 60, 62, 62, 64, 88], b: [38, 28, 38, 40, 40, 64, 46, 54, 60, 60, 62, 62, 66, 82] },
-            { n: 'Saltos de comba', g: 'Gemelos', q: 'c', w: 0, a: mk(S, { 6: 58, 7: 44, 8: 64, 9: 56 }), b: [50, 12, 50, 24, 50, 50, 58, 38, 66, 48, 50, 66, 50, 82] },
+            { n: 'Saltos de comba', g: 'Gemelos', q: 'c', w: 0, a: [50, 18, 50, 30, 50, 56, 58, 44, 64, 56, 50, 73, 50, 90], b: [50, 12, 50, 24, 50, 50, 58, 38, 66, 48, 50, 66, 50, 82] },
             { n: 'Press inclinado', g: 'Pecho', q: 'mg', w: 1, env: '<path d="M20 42L50 72H64"/>', a: [26, 40, 34, 48, 52, 70, 36, 36, 36, 22, 70, 64, 76, 88], b: [26, 40, 34, 48, 52, 70, 44, 50, 36, 44, 70, 64, 76, 88] },
             { n: 'Aperturas con mancuernas', g: 'Pecho', q: 'mg', w: 1, env: '<path d="M12 69H64"/>', a: [20, 62, 32, 62, 58, 62, 32, 48, 32, 36, 76, 60, 80, 88], b: [20, 62, 32, 62, 58, 62, 30, 54, 26, 60, 76, 60, 80, 88] },
             { n: 'Fondos en paralelas', g: 'Pecho', q: 'c', w: 0, env: '<path d="M40 50H64"/>', a: [50, 12, 50, 24, 52, 50, 52, 36, 52, 48, 56, 66, 46, 78], b: [56, 26, 52, 36, 52, 60, 60, 44, 52, 50, 56, 70, 46, 82] },
@@ -34,20 +33,20 @@
             { n: 'Jalón al pecho', g: 'Espalda', q: 'g', w: 0, env: '<path d="M36 6H72"/>', a: [40, 26, 40, 38, 42, 62, 48, 24, 52, 8, 62, 62, 64, 88], b: [40, 26, 40, 38, 42, 62, 48, 48, 56, 34, 62, 62, 64, 88] },
             { n: 'Remo en polea', g: 'Espalda', q: 'g', w: 0, a: [40, 26, 40, 38, 42, 64, 58, 50, 72, 52, 64, 62, 70, 88], b: [40, 26, 40, 38, 42, 64, 46, 52, 56, 50, 64, 62, 70, 88] },
             { n: 'Superman', g: 'Espalda', q: 'c', w: 0, a: [20, 78, 30, 80, 56, 82, 18, 82, 8, 82, 72, 82, 90, 82], b: [20, 68, 30, 72, 56, 82, 18, 70, 8, 64, 72, 80, 90, 72] },
-            { n: 'Remo al mentón', g: 'Hombro', q: 'mg', w: 1, a: mk(S, { 6: 52, 8: 54 }), b: [50, 18, 50, 30, 50, 56, 62, 32, 54, 36, 50, 73, 50, 90] },
-            { n: 'Face pull', g: 'Hombro', q: 'g', w: 0, env: '<path d="M82 24V34"/>', a: mk(S, { 6: 60, 7: 34, 8: 74, 9: 32 }), b: mk(S, { 6: 64, 7: 36, 8: 56, 9: 26 }) },
+            { n: 'Remo al mentón', g: 'Hombro', q: 'mg', w: 1, a: [50, 18, 50, 30, 50, 56, 52, 44, 54, 58, 50, 73, 50, 90], b: [50, 18, 50, 30, 50, 56, 62, 32, 54, 36, 50, 73, 50, 90] },
+            { n: 'Face pull', g: 'Hombro', q: 'g', w: 0, env: '<path d="M82 24V34"/>', a: [50, 18, 50, 30, 50, 56, 60, 34, 74, 32, 50, 73, 50, 90], b: [50, 18, 50, 30, 50, 56, 64, 36, 56, 26, 50, 73, 50, 90] },
             { n: 'Pájaros', g: 'Hombro', q: 'mg', w: 1, a: [70, 40, 62, 44, 36, 54, 64, 62, 64, 76, 42, 72, 40, 90], b: [70, 40, 62, 44, 36, 54, 66, 56, 68, 50, 42, 72, 40, 90] },
-            { n: 'Curl predicador', g: 'Bíceps', q: 'mg', w: 1, env: '<path d="M56 38L68 62"/>', a: mk(S, { 6: 60, 7: 46, 8: 64, 9: 58 }), b: mk(S, { 6: 60, 7: 46, 8: 56, 9: 32 }) },
+            { n: 'Curl predicador', g: 'Bíceps', q: 'mg', w: 1, env: '<path d="M56 38L68 62"/>', a: [50, 18, 50, 30, 50, 56, 60, 46, 64, 58, 50, 73, 50, 90], b: [50, 18, 50, 30, 50, 56, 60, 46, 56, 32, 50, 73, 50, 90] },
             { n: 'Curl concentrado', g: 'Bíceps', q: 'm', w: 1, a: [50, 28, 46, 40, 40, 64, 56, 56, 58, 72, 58, 66, 58, 90], b: [50, 28, 46, 40, 40, 64, 56, 56, 50, 52, 58, 66, 58, 90] },
             { n: 'Press francés', g: 'Tríceps', q: 'mg', w: 1, env: '<path d="M12 69H64"/>', a: [20, 62, 32, 62, 58, 62, 32, 48, 32, 36, 76, 60, 80, 88], b: [20, 62, 32, 62, 58, 62, 32, 48, 20, 54, 76, 60, 80, 88] },
             { n: 'Fondos en banco', g: 'Tríceps', q: 'cg', w: 0, env: '<path d="M20 58H44V90"/>', a: [56, 22, 54, 34, 46, 66, 44, 48, 40, 58, 66, 68, 84, 86], b: [56, 34, 54, 46, 46, 76, 38, 54, 40, 58, 66, 76, 84, 86] },
-            { n: 'Tríceps sobre la cabeza', g: 'Tríceps', q: 'mg', w: 1, a: mk(S, { 6: 54, 7: 14, 8: 46, 9: 24 }), b: mk(S, { 6: 54, 7: 14, 8: 54, 9: 2 }) },
+            { n: 'Tríceps sobre la cabeza', g: 'Tríceps', q: 'mg', w: 1, a: [50, 18, 50, 30, 50, 56, 54, 14, 46, 24, 50, 73, 50, 90], b: [50, 18, 50, 30, 50, 56, 54, 14, 54, 2, 50, 73, 50, 90] },
             { n: 'Patada de tríceps', g: 'Tríceps', q: 'mg', w: 1, a: [70, 40, 62, 44, 36, 54, 50, 52, 52, 66, 42, 72, 40, 90], b: [70, 40, 62, 44, 36, 54, 50, 52, 36, 50, 42, 72, 40, 90] },
             { n: 'Elevación de piernas', g: 'Abdomen', q: 'c', w: 0, a: [14, 78, 24, 80, 46, 82, 32, 84, 42, 86, 48, 60, 48, 40], b: [14, 78, 24, 80, 46, 82, 32, 84, 42, 86, 66, 82, 86, 80] },
             { n: 'Escaladores', g: 'Abdomen', q: 'c', w: 0, a: [22, 60, 28, 66, 58, 72, 28, 82, 28, 86, 72, 76, 88, 86], b: [22, 60, 28, 66, 58, 72, 28, 82, 28, 86, 48, 66, 42, 82] },
             { n: 'Giro ruso', g: 'Abdomen', q: 'cmg', w: 1, a: [32, 36, 36, 46, 44, 70, 52, 56, 62, 58, 66, 60, 78, 76], b: [32, 36, 36, 46, 44, 70, 46, 60, 54, 68, 66, 60, 78, 76] }
         ];
-        const D = {
+        const EXERCISE_DETAILS = {
             'Sentadilla': ['Barra, mancuerna o peso corporal', .8, 0, 'Pies a la anchura de los hombros. Baja llevando la cadera atrás y abajo con la espalda recta y las rodillas alineadas con los pies; sube empujando el suelo.'],
             'Zancada': ['Mancuernas o peso corporal', .25, 1, 'Da un paso largo al frente y baja hasta que ambas rodillas formen unos 90°. Empuja con la pierna delantera para volver y alterna.'],
             'Peso muerto rumano': ['Barra o mancuernas', .6, 0, 'Con las rodillas ligeramente flexionadas, lleva la cadera atrás y baja el peso pegado a las piernas con la espalda neutra. Sube apretando los glúteos.'],
@@ -93,66 +92,423 @@
             'Escaladores': ['Peso corporal', 0, 0, 'En posición de flexión, lleva una rodilla al pecho y alterna las piernas a buen ritmo con la cadera baja y el abdomen firme.'],
             'Giro ruso': ['Peso corporal, mancuerna o disco', .1, 0, 'Sentado con el torso inclinado y los pies elevados o apoyados, gira el tronco llevando el peso de un lado a otro con el abdomen apretado.']
         };
-        function rec(n, o) { const d = D[n]; if (!d || !d[1] || !o.pe || !o.eq.some(c => c !== 'c')) return null; const h = o.al / 100, r = Math.min(o.pe, 27 * h * h), af = o.ed < 18 ? .7 : o.ed < 40 ? 1 : o.ed < 50 ? .9 : o.ed < 60 ? .8 : .65, lf = { principiante: .6, intermedio: .85, avanzado: 1.1 }[o.niv], of = { fuerza: 1.15, hipertrofia: 1, resistencia: .75 }[o.obj]; let w = r * d[1] * af * lf * of; const st = w < 10 ? .5 : w < 30 ? 1 : 2.5; w = Math.max(1, Math.round(w / st) * st); return w + ' kg' + (d[2] ? ' por mancuerna' : '') }
-        function info(e, o) { const d = D[e.n]; if (!d) return ''; const w = rec(e.n, o || { eq: [] }); return `<div class="n">🧰 ${d[0]}${w ? ` · ⚖️ Peso orientativo: <b>${w}</b>` : ''}</div><details><summary>Cómo se hace</summary><div class="m">${d[3]}</div></details>` }
-        const G = { 'Cuerpo completo': ['Piernas', 'Pecho', 'Espalda', 'Hombro', 'Glúteo', 'Abdomen', 'Bíceps', 'Tríceps', 'Gemelos'], Empuje: ['Pecho', 'Hombro', 'Tríceps'], Tirón: ['Espalda', 'Bíceps', 'Abdomen'], Pierna: ['Piernas', 'Glúteo', 'Gemelos', 'Abdomen'], Torso: ['Pecho', 'Espalda', 'Hombro', 'Bíceps', 'Tríceps'] };
-        const OBJ = { fuerza: { s: 5, r: '5', d: 150 }, hipertrofia: { s: 4, r: '8-12', d: 75 }, resistencia: { s: 3, r: '15-20', d: 45 } };
-        const $ = s => document.querySelector(s), esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-        function fig(e) {
-            const SK = '#e0a982', SH = '#0f766e', SR = '#334155', HR = '#3b2a20', SO = '#f1f5f9', HL = '#f97316';
-            const bar = /^(Sentadilla|Press de banca|Peso muerto|Press militar)$/.test(e.n), A = ['Hombro', 'Bíceps', 'Tríceps', 'Pecho'].includes(e.g), Lg = ['Piernas', 'Glúteo', 'Gemelos'].includes(e.g), T = ['Espalda', 'Abdomen', 'Pecho'].includes(e.g);
-            const L = (a, b, w, c, o) => `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${c}" stroke-width="${w}"${o ? ` opacity="${o}"` : ''}/>`, M = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
-            const P = (p, o) => {
-                const [H, S, Hp, El, Ha, K, F] = [0, 1, 2, 3, 4, 5, 6].map(i => [p[i * 2], p[i * 2 + 1]]);
-                const leg = d => { const h = [Hp[0] + d, Hp[1]], k = [K[0] + d, K[1]], f = [F[0] + d, F[1]]; return L(h, k, 10, SK) + L(h, M(h, k, .7), 11.5, SR) + L(k, f, 7, SK) + L([f[0] - 2, f[1] - 1.5], [f[0] + 6, f[1] - 1.5], 5, SO) };
-                const arm = d => { const s = [S[0] + d, S[1]], e = [El[0] + d, El[1]], h = [Ha[0] + d, Ha[1]]; return L(s, e, 7.5, SH) + L(e, h, 5.5, SK) + `<circle cx="${h[0]}" cy="${h[1]}" r="3" fill="${SK}"/>` };
-                return `<g opacity="${o}"><g style="filter:brightness(.7)">${leg(-3)}${arm(-3)}</g>${L(H, S, 5, SK)}${L(S, Hp, 15, SH)}${L(M(S, Hp, .65), Hp, 14, SR)}${leg(0)}${arm(0)}<circle cx="${H[0]}" cy="${H[1]}" r="6.8" fill="${HR}"/><circle cx="${H[0] + 1.3}" cy="${H[1] + 1.3}" r="5.6" fill="${SK}"/>${A ? L(S, El, 3, HL, .7) + L(El, Ha, 2.5, HL, .7) : ''}${Lg ? L(Hp, K, 3.5, HL, .7) + L(K, F, 3, HL, .7) : ''}${T ? L(S, Hp, 4, HL, .6) : ''}${e.w ? `<circle cx="${Ha[0]}" cy="${Ha[1]}" r="${bar ? 8 : 4.5}" fill="#1f2937" stroke="#94a3b8" stroke-width="1.2"/>` : ''}</g>`
+        function getWeightRecommendation(exerciseName, userProfile) {
+            const exerciseDetails = EXERCISE_DETAILS[exerciseName];
+            const hasEquipmentWeights = userProfile.eq.some(equipment => equipment !== 'c');
+            if (!exerciseDetails || !exerciseDetails[1] || !userProfile.pe || !hasEquipmentWeights) return null;
+
+            const heightInMeters = userProfile.al / 100;
+            const bodyMassIndexWeight = Math.min(userProfile.pe, 27 * heightInMeters * heightInMeters);
+            const ageFactor = userProfile.ed < 18 ? .7
+                : userProfile.ed < 40 ? 1
+                    : userProfile.ed < 50 ? .9
+                        : userProfile.ed < 60 ? .8
+                            : .65;
+            const levelFactor = { principiante: .6, intermedio: .85, avanzado: 1.1 }[userProfile.niv];
+            const goalFactor = { fuerza: 1.15, hipertrofia: 1, resistencia: .75 }[userProfile.obj];
+            const estimatedWeight = bodyMassIndexWeight
+                * exerciseDetails[1]
+                * ageFactor
+                * levelFactor
+                * goalFactor;
+            const roundingStep = estimatedWeight < 10
+                ? .5
+                : estimatedWeight < 30 ? 1 : 2.5;
+            const recommendedWeight = Math.max(
+                1,
+                Math.round(estimatedWeight / roundingStep) * roundingStep
+            );
+            const dumbbellLabel = exerciseDetails[2] ? ' por mancuerna' : '';
+
+            return `${recommendedWeight} kg${dumbbellLabel}`;
+        }
+
+        function renderExerciseInfo(exercise, userProfile) {
+            const exerciseDetails = EXERCISE_DETAILS[exercise.n];
+            if (!exerciseDetails) return '';
+
+            const weightRecommendation = userProfile
+                ? getWeightRecommendation(exercise.n, userProfile)
+                : null;
+            const recommendationMarkup = weightRecommendation
+                ? ` · ⚖️ Peso orientativo: <b>${weightRecommendation}</b>`
+                : '';
+
+            return `<div class="n">🧰 ${exerciseDetails[0]}${recommendationMarkup}</div><details><summary>Cómo se hace</summary><div class="m">${exerciseDetails[3]}</div></details>`;
+        }
+
+        const SPLIT_MUSCLE_GROUPS = {
+            'Cuerpo completo': ['Piernas', 'Pecho', 'Espalda', 'Hombro', 'Glúteo', 'Abdomen', 'Bíceps', 'Tríceps', 'Gemelos'],
+            Empuje: ['Pecho', 'Hombro', 'Tríceps'],
+            Tirón: ['Espalda', 'Bíceps', 'Abdomen'],
+            Pierna: ['Piernas', 'Glúteo', 'Gemelos', 'Abdomen'],
+            Torso: ['Pecho', 'Espalda', 'Hombro', 'Bíceps', 'Tríceps']
+        };
+        const GOAL_SETTINGS = {
+            fuerza: { sets: 5, repetitions: '5', restSeconds: 150 },
+            hipertrofia: { sets: 4, repetitions: '8-12', restSeconds: 75 },
+            resistencia: { sets: 3, repetitions: '15-20', restSeconds: 45 }
+        };
+        const query = selector => document.querySelector(selector);
+        const escapeHTML = value => String(value).replace(/[&<>"]/g, character => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;'
+        }[character]));
+
+        function renderExerciseIllustration(exercise) {
+            const colors = {
+                skin: '#e0a982',
+                shirt: '#0f766e',
+                shorts: '#334155',
+                hair: '#3b2a20',
+                shoes: '#f1f5f9',
+                highlight: '#f97316'
             };
-            return `<svg viewBox="0 0 100 100" role="img" aria-label="${esc(e.n)}"><path d="M5 91H95" stroke="var(--ln)" stroke-width="2" fill="none"/><g fill="none" stroke="var(--mut)" stroke-width="3" stroke-linecap="round">${e.env || ''}</g>${P(e.a, .28)}${P(e.b, 1)}</svg>`
+            const usesBarbell = /^(Sentadilla|Press de banca|Peso muerto|Press militar)$/.test(exercise.n);
+            const highlightsArms = ['Hombro', 'Bíceps', 'Tríceps', 'Pecho'].includes(exercise.g);
+            const highlightsLegs = ['Piernas', 'Glúteo', 'Gemelos'].includes(exercise.g);
+            const highlightsTorso = ['Espalda', 'Abdomen', 'Pecho'].includes(exercise.g);
+
+            const drawLine = (start, end, width, color, opacity) =>
+                `<line x1="${start[0]}" y1="${start[1]}" x2="${end[0]}" y2="${end[1]}" stroke="${color}" stroke-width="${width}"${opacity ? ` opacity="${opacity}"` : ''}/>`;
+            const pointBetween = (start, end, ratio) => [
+                start[0] + (end[0] - start[0]) * ratio,
+                start[1] + (end[1] - start[1]) * ratio
+            ];
+            const drawPose = (pose, opacity) => {
+                const [head, shoulder, hip, elbow, hand, knee, foot] = [0, 1, 2, 3, 4, 5, 6]
+                    .map(index => [pose[index * 2], pose[index * 2 + 1]]);
+
+                const drawLeg = offset => {
+                    const shiftedHip = [hip[0] + offset, hip[1]];
+                    const shiftedKnee = [knee[0] + offset, knee[1]];
+                    const shiftedFoot = [foot[0] + offset, foot[1]];
+                    return drawLine(shiftedHip, shiftedKnee, 10, colors.skin)
+                        + drawLine(shiftedHip, pointBetween(shiftedHip, shiftedKnee, .7), 11.5, colors.shorts)
+                        + drawLine(shiftedKnee, shiftedFoot, 7, colors.skin)
+                        + drawLine(
+                            [shiftedFoot[0] - 2, shiftedFoot[1] - 1.5],
+                            [shiftedFoot[0] + 6, shiftedFoot[1] - 1.5],
+                            5,
+                            colors.shoes
+                        );
+                };
+                const drawArm = offset => {
+                    const shiftedShoulder = [shoulder[0] + offset, shoulder[1]];
+                    const shiftedElbow = [elbow[0] + offset, elbow[1]];
+                    const shiftedHand = [hand[0] + offset, hand[1]];
+                    return drawLine(shiftedShoulder, shiftedElbow, 7.5, colors.shirt)
+                        + drawLine(shiftedElbow, shiftedHand, 5.5, colors.skin)
+                        + `<circle cx="${shiftedHand[0]}" cy="${shiftedHand[1]}" r="3" fill="${colors.skin}"/>`;
+                };
+                const armHighlights = highlightsArms
+                    ? drawLine(shoulder, elbow, 3, colors.highlight, .7)
+                        + drawLine(elbow, hand, 2.5, colors.highlight, .7)
+                    : '';
+                const legHighlights = highlightsLegs
+                    ? drawLine(hip, knee, 3.5, colors.highlight, .7)
+                        + drawLine(knee, foot, 3, colors.highlight, .7)
+                    : '';
+                const torsoHighlight = highlightsTorso
+                    ? drawLine(shoulder, hip, 4, colors.highlight, .6)
+                    : '';
+                const weightMarkup = exercise.w
+                    ? `<circle cx="${hand[0]}" cy="${hand[1]}" r="${usesBarbell ? 8 : 4.5}" fill="#1f2937" stroke="#94a3b8" stroke-width="1.2"/>`
+                    : '';
+
+                return `<g opacity="${opacity}"><g style="filter:brightness(.7)">${drawLeg(-3)}${drawArm(-3)}</g>`
+                    + `${drawLine(head, shoulder, 5, colors.skin)}`
+                    + `${drawLine(shoulder, hip, 15, colors.shirt)}`
+                    + `${drawLine(pointBetween(shoulder, hip, .65), hip, 14, colors.shorts)}`
+                    + `${drawLeg(0)}${drawArm(0)}`
+                    + `<circle cx="${head[0]}" cy="${head[1]}" r="6.8" fill="${colors.hair}"/>`
+                    + `<circle cx="${head[0] + 1.3}" cy="${head[1] + 1.3}" r="5.6" fill="${colors.skin}"/>`
+                    + `${armHighlights}${legHighlights}${torsoHighlight}${weightMarkup}</g>`;
+            };
+
+            return `<svg viewBox="0 0 100 100" role="img" aria-label="${escapeHTML(exercise.n)}">`
+                + '<path d="M5 91H95" stroke="var(--ln)" stroke-width="2" fill="none"/>'
+                + `<g fill="none" stroke="var(--mut)" stroke-width="3" stroke-linecap="round">${exercise.env || ''}</g>`
+                + `${drawPose(exercise.a, .28)}${drawPose(exercise.b, 1)}</svg>`;
         }
-        const ld = () => { try { return JSON.parse(localStorage.getItem('tablas') || '[]') } catch (e) { return [] } };
-        const sv = a => { try { localStorage.setItem('tablas', JSON.stringify(a)); return 1 } catch (e) { alert('No se pudo guardar en este dispositivo.') } };
-        let draft = null, tab = 0;
-        function gen(o) {
-            const P = OBJ[o.obj], n = { principiante: 5, intermedio: 6, avanzado: 7 }[o.niv], s = o.niv === 'principiante' ? Math.min(P.s, 3) : P.s;
-            const av = E.filter(e => [...e.q].some(c => o.eq.includes(c))); if (!av.length) return null; const use = {};
-            const names = o.dias <= 3 ? Array(o.dias).fill('Cuerpo completo') : o.dias == 4 ? ['Torso', 'Pierna', 'Torso', 'Pierna'] : o.dias == 5 ? ['Empuje', 'Tirón', 'Pierna', 'Torso', 'Pierna'] : ['Empuje', 'Tirón', 'Pierna', 'Empuje', 'Tirón', 'Pierna'];
-            const days = names.map((nm, i) => {
-                let gr = G[nm].slice(); if (nm === 'Cuerpo completo') gr = gr.slice(i * 2).concat(gr.slice(0, i * 2));
-                const day = []; for (let k = 0; k < n && day.length < n; k++) {
-                    let c = av.filter(e => e.g === gr[k % gr.length] && !day.includes(e)); if (!c.length) c = av.filter(e => gr.includes(e.g) && !day.includes(e)); if (!c.length) break;
-                    c.sort((a, b) => (use[a.n] || 0) - (use[b.n] || 0) + (Math.random() - .5)); const e = c[0]; use[e.n] = (use[e.n] || 0) + 1; day.push(e)
+        function loadSavedTables() {
+            try {
+                return JSON.parse(localStorage.getItem('tablas') || '[]');
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function saveTables(tables) {
+            try {
+                localStorage.setItem('tablas', JSON.stringify(tables));
+                return true;
+            } catch (error) {
+                alert('No se pudo guardar en este dispositivo.');
+                return false;
+            }
+        }
+
+        let tableDraft = null;
+        let activeTab = 0;
+
+        function generateTrainingTable(userOptions) {
+            const goalSettings = GOAL_SETTINGS[userOptions.obj];
+            const exercisesPerDay = { principiante: 5, intermedio: 6, avanzado: 7 }[userOptions.niv];
+            const setsPerExercise = userOptions.niv === 'principiante'
+                ? Math.min(goalSettings.sets, 3)
+                : goalSettings.sets;
+            const availableExercises = EXERCISES.filter(exercise =>
+                [...exercise.q].some(equipment => userOptions.eq.includes(equipment))
+            );
+            if (!availableExercises.length) return null;
+
+            const exerciseUsageCounts = {};
+            const splitNames = userOptions.dias <= 3
+                ? Array(userOptions.dias).fill('Cuerpo completo')
+                : userOptions.dias === 4
+                    ? ['Torso', 'Pierna', 'Torso', 'Pierna']
+                    : userOptions.dias === 5
+                        ? ['Empuje', 'Tirón', 'Pierna', 'Torso', 'Pierna']
+                        : ['Empuje', 'Tirón', 'Pierna', 'Empuje', 'Tirón', 'Pierna'];
+
+            const days = splitNames.map((splitName, dayIndex) => {
+                let muscleGroups = SPLIT_MUSCLE_GROUPS[splitName].slice();
+                if (splitName === 'Cuerpo completo') {
+                    muscleGroups = muscleGroups.slice(dayIndex * 2)
+                        .concat(muscleGroups.slice(0, dayIndex * 2));
                 }
-                return { t: `Día ${i + 1} · ${nm}`, it: day.map(e => ({ n: e.n, s, r: e.t ? '30-45 s' : P.r, d: P.d })) }
+
+                const dayExercises = [];
+                for (let index = 0; index < exercisesPerDay; index++) {
+                    let candidates = availableExercises.filter(exercise =>
+                        exercise.g === muscleGroups[index % muscleGroups.length]
+                        && !dayExercises.includes(exercise)
+                    );
+                    if (!candidates.length) {
+                        candidates = availableExercises.filter(exercise =>
+                            muscleGroups.includes(exercise.g)
+                            && !dayExercises.includes(exercise)
+                        );
+                    }
+                    if (!candidates.length) break;
+
+                    candidates.sort((firstExercise, secondExercise) =>
+                        (exerciseUsageCounts[firstExercise.n] || 0)
+                        - (exerciseUsageCounts[secondExercise.n] || 0)
+                        + (Math.random() - .5)
+                    );
+                    const selectedExercise = candidates[0];
+                    exerciseUsageCounts[selectedExercise.n] =
+                        (exerciseUsageCounts[selectedExercise.n] || 0) + 1;
+                    dayExercises.push(selectedExercise);
+                }
+
+                return {
+                    t: `Día ${dayIndex + 1} · ${splitName}`,
+                    it: dayExercises.map(exercise => ({
+                        n: exercise.n,
+                        s: setsPerExercise,
+                        r: exercise.t ? '30-45 s' : goalSettings.repetitions,
+                        d: goalSettings.restSeconds
+                    }))
+                };
             });
-            return { name: '', date: new Date().toLocaleDateString('es-ES'), o, days }
+
+            return {
+                name: '',
+                date: new Date().toLocaleDateString('es-ES'),
+                o: userOptions,
+                days
+            };
         }
-        const byN = n => E.find(e => e.n === n);
-        function table(t) { return `<h2>${esc(t.name || 'Vista previa')}</h2><div class="m">${t.o.obj} · ${t.o.niv} · ${t.o.dias} días/semana · ${t.date}${t.o.pe ? ` · ${t.o.ed} años · ${t.o.pe} kg · ${t.o.al} cm` : ''}</div>${t.o.pe ? `<div class="n">Los pesos son orientativos (calculados con tu edad, peso, altura, nivel y objetivo): un punto de partida para las series de trabajo. Prioriza la técnica y ajusta si te cuesta o te sobra.${t.o.ed < 18 ? ' Siendo menor de edad, entrena con supervisión y cargas ligeras.' : ''} Consulta con un médico si tienes lesiones o dolencias.</div>` : ''}` + t.days.map(d => `<h2>${esc(d.t)}</h2>` + d.it.map(x => { const e = byN(x.n); return e ? `<div class="c"><div class="ex">${fig(e)}<div><b>${esc(e.n)}</b><div class="m">${e.g}</div><div>${x.s} series × ${x.r}</div><div class="m">Descanso ${x.d} s</div></div></div>${info(e, t.o)}</div>` : '' }).join('')).join('') }
-        function show() {
-            document.querySelectorAll('nav button').forEach((b, i) => b.className = i === tab ? 'on' : ''); const v = $('#v');
-            if (tab === 0) {
-                v.innerHTML = draft ? table(draft) + `<label>Nombre de la tabla</label><input type="text" id="nm" value="${esc(draft.name)}" placeholder="Ej. Fuerza 4 días"><div class="row"><button class="p" id="sv">💾 Guardar</button><button id="rg">🔄 Regenerar</button></div><button class="big" id="nw">← Cambiar condiciones</button>` : `<div class="c"><label style="margin-top:0">Objetivo</label><select id="obj"><option value="hipertrofia">Ganar músculo</option><option value="fuerza">Ganar fuerza</option><option value="resistencia">Resistencia muscular</option></select>
+
+        function findExerciseByName(exerciseName) {
+            return EXERCISES.find(exercise => exercise.n === exerciseName);
+        }
+
+        function renderTrainingTable(trainingTable) {
+            const { name, date, o: userOptions, days } = trainingTable;
+            const personalDetails = userOptions.pe
+                ? ` · ${userOptions.ed} años · ${userOptions.pe} kg · ${userOptions.al} cm`
+                : '';
+            const safetyNotice = userOptions.pe
+                ? `<div class="n">Los pesos son orientativos (calculados con tu edad, peso, altura, nivel y objetivo): un punto de partida para las series de trabajo. Prioriza la técnica y ajusta si te cuesta o te sobra.${userOptions.ed < 18 ? ' Siendo menor de edad, entrena con supervisión y cargas ligeras.' : ''} Consulta con un médico si tienes lesiones o dolencias.</div>`
+                : '';
+            const renderedDays = days.map(day => {
+                const renderedExercises = day.it.map(plannedExercise => {
+                    const exercise = findExerciseByName(plannedExercise.n);
+                    if (!exercise) return '';
+
+                    return `<div class="c"><div class="ex">${renderExerciseIllustration(exercise)}<div>`
+                        + `<b>${escapeHTML(exercise.n)}</b><div class="m">${exercise.g}</div>`
+                        + `<div>${plannedExercise.s} series × ${plannedExercise.r}</div>`
+                        + `<div class="m">Descanso ${plannedExercise.d} s</div></div></div>`
+                        + `${renderExerciseInfo(exercise, userOptions)}</div>`;
+                }).join('');
+
+                return `<h2>${escapeHTML(day.t)}</h2>${renderedExercises}`;
+            }).join('');
+
+            return `<h2>${escapeHTML(name || 'Vista previa')}</h2>`
+                + `<div class="m">${userOptions.obj} · ${userOptions.niv} · ${userOptions.dias} días/semana · ${date}${personalDetails}</div>`
+                + safetyNotice
+                + renderedDays;
+        }
+
+        function renderExerciseCatalog() {
+            const muscleGroups = ['Todos', ...new Set(EXERCISES.map(exercise => exercise.g))];
+            const view = query('#v');
+            view.innerHTML = `<div class="f">${muscleGroups.map(group =>
+                `<button data-g="${group}">${group}</button>`
+            ).join('')}</div><div class="g" id="gr"></div>`;
+
+            const renderExercisesForGroup = selectedGroup => {
+                const matchingExercises = EXERCISES.filter(exercise =>
+                    selectedGroup === 'Todos' || exercise.g === selectedGroup
+                );
+                query('#gr').innerHTML = matchingExercises.map(exercise =>
+                    `<div class="c">${renderExerciseIllustration(exercise)}`
+                    + `<b>${escapeHTML(exercise.n)}</b><div class="m">${exercise.g}</div>`
+                    + `${renderExerciseInfo(exercise)}</div>`
+                ).join('');
+            };
+
+            renderExercisesForGroup('Todos');
+            view.querySelectorAll('[data-g]').forEach(button => {
+                button.onclick = () => renderExercisesForGroup(button.dataset.g);
+            });
+        }
+
+        function renderTableDraft() {
+            const draftMarkup = tableDraft
+                ? renderTrainingTable(tableDraft)
+                    + `<label>Nombre de la tabla</label><input type="text" id="nm" value="${escapeHTML(tableDraft.name)}" placeholder="Ej. Fuerza 4 días">`
+                    + '<div class="row"><button class="p" id="sv">💾 Guardar</button>'
+                    + '<button id="rg">🔄 Regenerar</button></div>'
+                    + '<button class="big" id="nw">← Cambiar condiciones</button>'
+                : `<div class="c"><label style="margin-top:0">Objetivo</label><select id="obj"><option value="hipertrofia">Ganar músculo</option><option value="fuerza">Ganar fuerza</option><option value="resistencia">Resistencia muscular</option></select>
 <label>Nivel</label><select id="niv"><option>principiante</option><option selected>intermedio</option><option>avanzado</option></select>
-<label>Días por semana</label><select id="dias">${[2, 3, 4, 5, 6].map(n => `<option ${n == 3 ? 'selected' : ''}>${n}</option>`).join('')}</select>
+<label>Días por semana</label><select id="dias">${[2, 3, 4, 5, 6].map(dayCount => `<option ${dayCount === 3 ? 'selected' : ''}>${dayCount}</option>`).join('')}</select>
 <label>Tus datos</label><div class="tri"><div><input type="number" id="ed" placeholder="Edad" inputmode="numeric" min="12" max="90"></div><div><input type="number" id="pe" placeholder="Peso kg" inputmode="decimal" min="30" max="250"></div><div><input type="number" id="al" placeholder="Altura cm" inputmode="numeric" min="120" max="230"></div></div>
 <label>Material disponible</label><div class="ck"><label><input type="checkbox" value="c" checked>Peso corporal</label><label><input type="checkbox" value="m" checked>Mancuernas/barra</label><label><input type="checkbox" value="g" checked>Gimnasio</label></div>
 <button class="p big" id="go">Generar tabla</button></div>`;
-                if (draft) { $('#sv').onclick = () => { draft.name = $('#nm').value.trim() || 'Tabla ' + (ld().length + 1); draft.id = Date.now(); const a = ld(); a.unshift(draft); if (sv(a)) { draft = null; tab = 1; show() } }; $('#rg').onclick = () => { const o = draft.o; draft = gen(o); show() }; $('#nw').onclick = () => { draft = null; show() } }
-                else $('#go').onclick = () => {
-                    const eq = [...document.querySelectorAll('.ck input:checked')].map(i => i.value); if (!eq.length) return alert('Elige al menos un tipo de material.');
-                    const ed = +$('#ed').value, pe = +$('#pe').value, al = +$('#al').value; if (!(ed >= 12 && ed <= 90 && pe >= 30 && pe <= 250 && al >= 120 && al <= 230)) return alert('Introduce edad (12-90), peso (30-250 kg) y altura (120-230 cm).');
-                    draft = gen({ obj: $('#obj').value, niv: $('#niv').value, dias: +$('#dias').value, eq, ed, pe, al }); show(); scrollTo(0, 0)
-                }
-            }
-            else if (tab === 1) {
-                const a = ld(); v.innerHTML = a.length ? a.map(t => `<div class="c"><b>${esc(t.name)}</b><div class="m">${t.o.obj} · ${t.o.niv} · ${t.o.dias} días · ${t.date}</div><div class="row"><button class="p" data-o="${t.id}">Abrir</button><button class="d" data-x="${t.id}">Borrar</button></div></div>`).join('') : '<p class="m">Aún no has guardado ninguna tabla. Ve a «Crear».</p>';
-                v.querySelectorAll('[data-o]').forEach(b => b.onclick = () => { const t = ld().find(x => x.id == b.dataset.o); v.innerHTML = `<button id="bk">← Volver</button>` + table(t); $('#bk').onclick = show });
-                v.querySelectorAll('[data-x]').forEach(b => b.onclick = () => { if (confirm('¿Borrar esta tabla?')) { sv(ld().filter(x => x.id != b.dataset.x)); show() } })
-            }
-            else {
-                const gs = ['Todos', ...new Set(E.map(e => e.g))]; v.innerHTML = `<div class="f">${gs.map(g => `<button data-g="${g}">${g}</button>`).join('')}</div><div class="g" id="gr"></div>`;
-                const r = g => { $('#gr').innerHTML = E.filter(e => g === 'Todos' || e.g === g).map(e => `<div class="c">${fig(e)}<b>${esc(e.n)}</b><div class="m">${e.g}</div>${info(e)}</div>`).join('') }; r('Todos'); v.querySelectorAll('[data-g]').forEach(b => b.onclick = () => r(b.dataset.g))
+
+            query('#v').innerHTML = draftMarkup;
+            if (tableDraft) {
+                bindDraftActions();
+            } else {
+                query('#go').onclick = handleGenerateTable;
             }
         }
-        [0, 1, 2].forEach(i => $('#t' + i).onclick = () => { tab = i; show() }); show();
+
+        function bindDraftActions() {
+            query('#sv').onclick = () => {
+                tableDraft.name = query('#nm').value.trim() || `Tabla ${loadSavedTables().length + 1}`;
+                tableDraft.id = Date.now();
+                const savedTables = loadSavedTables();
+                savedTables.unshift(tableDraft);
+
+                if (saveTables(savedTables)) {
+                    tableDraft = null;
+                    activeTab = 1;
+                    renderCurrentView();
+                }
+            };
+            query('#rg').onclick = () => {
+                tableDraft = generateTrainingTable(tableDraft.o);
+                renderCurrentView();
+            };
+            query('#nw').onclick = () => {
+                tableDraft = null;
+                renderCurrentView();
+            };
+        }
+
+        function handleGenerateTable() {
+            const selectedEquipment = [...document.querySelectorAll('.ck input:checked')]
+                .map(input => input.value);
+            if (!selectedEquipment.length) {
+                alert('Elige al menos un tipo de material.');
+                return;
+            }
+
+            const age = +query('#ed').value;
+            const weight = +query('#pe').value;
+            const height = +query('#al').value;
+            const validPersonalDetails = age >= 12 && age <= 90
+                && weight >= 30 && weight <= 250
+                && height >= 120 && height <= 230;
+            if (!validPersonalDetails) {
+                alert('Introduce edad (12-90), peso (30-250 kg) y altura (120-230 cm).');
+                return;
+            }
+
+            tableDraft = generateTrainingTable({
+                obj: query('#obj').value,
+                niv: query('#niv').value,
+                dias: +query('#dias').value,
+                eq: selectedEquipment,
+                ed: age,
+                pe: weight,
+                al: height
+            });
+            renderCurrentView();
+            scrollTo(0, 0);
+        }
+
+        function renderSavedTables() {
+            const view = query('#v');
+            const savedTables = loadSavedTables();
+            view.innerHTML = savedTables.length
+                ? savedTables.map(trainingTable =>
+                    `<div class="c"><b>${escapeHTML(trainingTable.name)}</b>`
+                    + `<div class="m">${trainingTable.o.obj} · ${trainingTable.o.niv} · ${trainingTable.o.dias} días · ${trainingTable.date}</div>`
+                    + `<div class="row"><button class="p" data-o="${trainingTable.id}">Abrir</button>`
+                    + `<button class="d" data-x="${trainingTable.id}">Borrar</button></div></div>`
+                ).join('')
+                : '<p class="m">Aún no has guardado ninguna tabla. Ve a «Crear».</p>';
+
+            view.querySelectorAll('[data-o]').forEach(button => {
+                button.onclick = () => {
+                    const selectedTable = loadSavedTables()
+                        .find(trainingTable => trainingTable.id == button.dataset.o);
+                    view.innerHTML = '<button id="bk">← Volver</button>'
+                        + renderTrainingTable(selectedTable);
+                    query('#bk').onclick = renderCurrentView;
+                };
+            });
+            view.querySelectorAll('[data-x]').forEach(button => {
+                button.onclick = () => {
+                    if (!confirm('¿Borrar esta tabla?')) return;
+                    saveTables(loadSavedTables().filter(trainingTable =>
+                        trainingTable.id != button.dataset.x
+                    ));
+                    renderCurrentView();
+                };
+            });
+        }
+
+        function renderCurrentView() {
+            document.querySelectorAll('nav button').forEach((button, index) => {
+                button.className = index === activeTab ? 'on' : '';
+            });
+
+            if (activeTab === 0) {
+                renderTableDraft();
+            } else if (activeTab === 1) {
+                renderSavedTables();
+            } else {
+                renderExerciseCatalog();
+            }
+        }
+
+        [0, 1, 2].forEach(tabIndex => {
+            query(`#t${tabIndex}`).onclick = () => {
+                activeTab = tabIndex;
+                renderCurrentView();
+            };
+        });
+        renderCurrentView();
