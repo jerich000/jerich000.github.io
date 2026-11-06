@@ -165,6 +165,21 @@
             background: var(--card)
         }
 
+        .equipment-filter {
+            border: 0;
+            margin: 4px 0 14px;
+            padding: 0
+        }
+
+        .equipment-filter legend {
+            font-weight: 600;
+            margin-bottom: 6px
+        }
+
+        .equipment-filter .m {
+            margin: 6px 0 0
+        }
+
         .g {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));

@@ -401,25 +401,56 @@ const EXERCISES = [
 
         function renderExerciseCatalog() {
             const muscleGroups = ['Todos', ...new Set(EXERCISES.map(exercise => exercise.g))];
+            const equipmentOptions = [
+                ['c', 'Peso corporal'],
+                ['m', 'Mancuernas/barra'],
+                ['g', 'Gimnasio']
+            ];
+            let selectedGroup = 'Todos';
+            const selectedEquipment = new Set(equipmentOptions.map(([code]) => code));
             const view = query('#v');
             view.innerHTML = `<div class="f">${muscleGroups.map(group =>
-                `<button data-g="${group}">${group}</button>`
-            ).join('')}</div><div class="g" id="gr"></div>`;
+                `<button data-g="${group}" class="${group === selectedGroup ? 'on' : ''}" aria-pressed="${group === selectedGroup}">${group}</button>`
+            ).join('')}</div><fieldset class="equipment-filter"><legend>Material disponible</legend>`
+                + `<div class="ck">${equipmentOptions.map(([code, label]) =>
+                    `<label><input type="checkbox" data-e="${code}" checked>${label}</label>`
+                ).join('')}</div><p class="m">Se muestran ejercicios que puedes hacer con al menos uno de los materiales seleccionados.</p>`
+                + `</fieldset><div class="g" id="gr"></div>`;
 
-            const renderExercisesForGroup = selectedGroup => {
+            const renderFilteredExercises = () => {
                 const matchingExercises = EXERCISES.filter(exercise =>
-                    selectedGroup === 'Todos' || exercise.g === selectedGroup
+                    (selectedGroup === 'Todos' || exercise.g === selectedGroup)
+                    && [...selectedEquipment].some(equipment => exercise.q.includes(equipment))
                 );
-                query('#gr').innerHTML = matchingExercises.map(exercise =>
-                    `<div class="c">${renderExerciseIllustration(exercise)}`
-                    + `<b>${escapeHTML(exercise.n)}</b><div class="m">${exercise.g}</div>`
-                    + `${renderExerciseInfo(exercise)}</div>`
-                ).join('');
+                query('#gr').innerHTML = matchingExercises.length
+                    ? matchingExercises.map(exercise =>
+                        `<div class="c">${renderExerciseIllustration(exercise)}`
+                        + `<b>${escapeHTML(exercise.n)}</b><div class="m">${exercise.g}</div>`
+                        + `${renderExerciseInfo(exercise)}</div>`
+                    ).join('')
+                    : '<p class="m">No hay ejercicios con los filtros seleccionados.</p>';
             };
 
-            renderExercisesForGroup('Todos');
+            renderFilteredExercises();
             view.querySelectorAll('[data-g]').forEach(button => {
-                button.onclick = () => renderExercisesForGroup(button.dataset.g);
+                button.onclick = () => {
+                    selectedGroup = button.dataset.g;
+                    view.querySelectorAll('[data-g]').forEach(groupButton => {
+                        const isSelected = groupButton === button;
+                        groupButton.classList.toggle('on', isSelected);
+                        groupButton.setAttribute('aria-pressed', String(isSelected));
+                    });
+                    renderFilteredExercises();
+                };
+            });
+            view.querySelectorAll('[data-e]').forEach(checkbox => {
+                checkbox.onchange = () => {
+                    selectedEquipment.clear();
+                    view.querySelectorAll('[data-e]:checked').forEach(selectedCheckbox => {
+                        selectedEquipment.add(selectedCheckbox.dataset.e);
+                    });
+                    renderFilteredExercises();
+                };
             });
         }
 
