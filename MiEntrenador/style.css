@@ -24,6 +24,10 @@
             }
         }
 
+        :root[data-theme="light"] {
+            color-scheme: light
+        }
+
         :root[data-theme="dark"] {
             --bg: #0e1514;
             --card: #17211f;
@@ -53,9 +57,25 @@
             padding: 0 14px 80px
         }
 
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px
+        }
+
         h1 {
             font-size: 1.3rem;
             margin: 16px 0 8px
+        }
+
+        #theme-toggle {
+            flex: none;
+            min-width: 44px;
+            min-height: 44px;
+            padding: 8px;
+            font-size: 1.15rem;
+            line-height: 1
         }
 
         h2 {

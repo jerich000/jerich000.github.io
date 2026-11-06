@@ -157,6 +157,47 @@ const EXERCISES = [
             '"': '&quot;'
         }[character]));
 
+        const themeRoot = document.documentElement;
+        const themeToggle = query('#theme-toggle');
+
+        function updateThemeToggle() {
+            const isDark = themeRoot.dataset.theme
+                ? themeRoot.dataset.theme === 'dark'
+                : window.matchMedia('(prefers-color-scheme: dark)').matches;
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+            themeToggle.setAttribute('aria-label', isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+            themeToggle.setAttribute('aria-pressed', String(isDark));
+            themeToggle.title = isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro';
+        }
+
+        try {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light' || savedTheme === 'dark') {
+                themeRoot.dataset.theme = savedTheme;
+            }
+        } catch (error) {
+            console.error('No se pudo leer la preferencia de tema.', error);
+        }
+
+        themeToggle.onclick = () => {
+            const isDark = themeRoot.dataset.theme
+                ? themeRoot.dataset.theme === 'dark'
+                : window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = isDark ? 'light' : 'dark';
+            themeRoot.dataset.theme = theme;
+            updateThemeToggle();
+
+            try {
+                localStorage.setItem('theme', theme);
+            } catch (error) {
+                console.error('No se pudo guardar la preferencia de tema.', error);
+            }
+        };
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+            if (!themeRoot.dataset.theme) updateThemeToggle();
+        });
+        updateThemeToggle();
+
         function renderExerciseIllustration(exercise) {
             const colors = {
                 skin: '#e0a982',
