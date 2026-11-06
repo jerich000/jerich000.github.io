@@ -137,6 +137,14 @@
             margin: 10px 0
         }
 
+        .exercise-number {
+            color: var(--ac);
+            font-size: 1.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 6px
+        }
+
         label {
             display: block;
             margin: 12px 0 4px;

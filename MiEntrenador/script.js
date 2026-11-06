@@ -379,11 +379,12 @@ const EXERCISES = [
                 ? `<div class="n">Los pesos son orientativos (calculados con tu edad, peso, altura, nivel y objetivo): un punto de partida para las series de trabajo. Prioriza la técnica y ajusta si te cuesta o te sobra.${userOptions.ed < 18 ? ' Siendo menor de edad, entrena con supervisión y cargas ligeras.' : ''} Consulta con un médico si tienes lesiones o dolencias.</div>`
                 : '';
             const renderedDays = days.map(day => {
-                const renderedExercises = day.it.map(plannedExercise => {
+                const renderedExercises = day.it.map((plannedExercise, index) => {
                     const exercise = findExerciseByName(plannedExercise.n);
                     if (!exercise) return '';
 
-                    return `<div class="c"><div class="ex">${renderExerciseIllustration(exercise)}<div>`
+                    return `<div class="c"><div class="exercise-number">#${index + 1}</div>`
+                        + `<div class="ex">${renderExerciseIllustration(exercise)}<div>`
                         + `<b>${escapeHTML(exercise.n)}</b><div class="m">${exercise.g}</div>`
                         + `<div>${plannedExercise.s} series × ${plannedExercise.r}</div>`
                         + `<div class="m">Descanso ${plannedExercise.d} s</div></div></div>`
