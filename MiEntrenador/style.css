@@ -1,11 +1,13 @@
 :root {
             --bg: #f4f6f5;
             --card: #fff;
-            --tx: #14201e;
-            --mut: #5d6b68;
-            --ac: #0f766e;
+            --tx: #10201c;
+            --mut: #4b5a56;
+            --ac: #08665f;
+            --on-ac: #fff;
+            --danger: #a52a21;
             --ln: #d9e0de;
-            --fig: #0f766e;
+            --fig: #08665f;
             box-sizing: border-box;
             padding-top: env(safe-area-inset-top, 0px);
             padding-bottom: env(safe-area-inset-bottom, 0px)
@@ -15,9 +17,11 @@
             :root:not([data-theme="light"]) {
                 --bg: #0e1514;
                 --card: #17211f;
-                --tx: #e8f0ee;
-                --mut: #9bb0ab;
+                --tx: #f1f5f4;
+                --mut: #b5c5c1;
                 --ac: #2dd4bf;
+                --on-ac: #08201c;
+                --danger: #ff8a80;
                 --ln: #2a3935;
                 --fig: #2dd4bf;
                 color-scheme: dark
@@ -31,9 +35,11 @@
         :root[data-theme="dark"] {
             --bg: #0e1514;
             --card: #17211f;
-            --tx: #e8f0ee;
-            --mut: #9bb0ab;
+            --tx: #f1f5f4;
+            --mut: #b5c5c1;
             --ac: #2dd4bf;
+            --on-ac: #08201c;
+            --danger: #ff8a80;
             --ln: #2a3935;
             --fig: #2dd4bf;
             color-scheme: dark
@@ -51,7 +57,7 @@
         body {
             background: var(--bg);
             color: var(--tx);
-            font: 16px/1.4 system-ui, sans-serif;
+            font: 17px/1.5 system-ui, sans-serif;
             max-width: 720px;
             margin: auto;
             padding: 0 14px 80px
@@ -65,7 +71,7 @@
         }
 
         h1 {
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             margin: 16px 0 8px
         }
 
@@ -79,7 +85,7 @@
         }
 
         h2 {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             margin: 18px 0 8px
         }
 
@@ -115,12 +121,12 @@
         button.on,
         button.p {
             background: var(--ac);
-            color: #fff;
+            color: var(--on-ac);
             border-color: var(--ac)
         }
 
         button.d {
-            color: #c0392b
+            color: var(--danger)
         }
 
         .c {
@@ -214,7 +220,7 @@
 
         .m {
             color: var(--mut);
-            font-size: .88rem
+            font-size: .92rem
         }
 
         .row {
@@ -252,7 +258,7 @@
         }
 
         .n {
-            font-size: .85rem;
+            font-size: .9rem;
             color: var(--mut);
             margin-top: 8px
         }
